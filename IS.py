@@ -25,12 +25,16 @@ with ruleset('test'):
     # antecedent
     @when_any(m.Arenguklass == 'Noorendik')
     def ei_raie_noorendik(c):
-        print('Ei raiu, sest arengusklass on {0}'.format(c.m.Arenguklass))
+        print('Raiumisotsus: Ei. sest arengusklass on {0}'.format(c.m.Arenguklass))
         
+    @when_any(m.Looduskaitsealune == 'jah')
+    def ei_raie_noorendik(c):
+        print('Raiumisotsus: Ei. Looduskaitsealune'.format(c.m.Looduskaitsealune))
+    
     @when_any ((m.Arenguklass == 'latimets') & (m.Puudearv < 30000), (m.Arenguklass == 'noorendik'), (m.Looduskaitsealune == 'jah'))
     def ei_raie(c):
         # consequent
-        print ('Ei raiu, lõpeta kogu töö. Raiumisotsus: ei')
+        print ('Raiumisotsus: Ei. Lõpeta kogu töö. ')
     @when_all ((m.Arenguklass == 'latimets') & (m.Puudearv > 30000))
     def jah_raie(c):
         # consequent
@@ -123,3 +127,19 @@ post('test', {'Arenguklass':'suva',
               }) 
 post('test', {
               'Kahjustus':'Väga tugev'})
+
+post('test', {'Arenguklass':'Noorendik',
+              'Peapuuliik' : 'Mänd',
+              'Puudearv':1000,
+              'Raiekpv':'15-05-2020',
+              'Vanus':52, 
+              'Diameeter':4, 
+              'Boniteediklass':'1'
+              }) 
+
+post('test', {'Arenguklass':'Latimets',
+              'Peapuuliik' : 'Hall pähklipuu',
+              'Puudearv':1,
+              'Vanus':230, 
+              'Looduskaitsealune':'jah'
+              }) 
