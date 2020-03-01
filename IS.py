@@ -20,9 +20,7 @@ print(start,end)
 #print(dt)
 #boniteediklass = str(m.Kõrgus + m.Vanus) #proovisin inputist kätte saada väärtusi, annab mingi errori
 
-#    @when_any(m.Kahjustus == 'Keskmine' or 'Tugev' or 'Väga tugev')
-#    def ei_raie_kahjustatus(c):
-#        print('Ei raiu, sest kahjustatus on {0}'.format(c.m.Kahjustus)) #Siin peab määrama veel midagi
+#     #Siin peab määrama veel midagi
 with ruleset('test'):
     # antecedent
     @when_any(m.Arenguklass == 'Noorendik')
@@ -32,71 +30,96 @@ with ruleset('test'):
     @when_any ((m.Arenguklass == 'latimets') & (m.Puudearv < 30000), (m.Arenguklass == 'noorendik'), (m.Looduskaitsealune == 'jah'))
     def ei_raie(c):
         # consequent
-        print ('Ei raiu, lõpeta kogu töö. Raiumisotsus: ei') 
+        print ('Ei raiu, lõpeta kogu töö. Raiumisotsus: ei')
+    @when_all ((m.Arenguklass == 'latimets') & (m.Puudearv > 30000))
+    def jah_raie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Valgustusraie')
         
     @when_all ((m.Arenguklass == 'latimets') & (m.Diameeter > 6))
     def harvendusraie(c):
         # consequent
-        print ('Raiumisotsus:Jah. Raietüüp: Harvendusraie. Puu diaameeter:{0}'.format(c.m.Diameeter))
-    @when_all ((m.Arenguklass == 'Keskealine' or'Valmiv mets' or'Küpsmets'))
+        print ('Raiumisotsus:Jah. Raietüüp: Harvendusraie. Puu diameeter:{0}'.format(c.m.Diameeter))
+    @when_all ((m.Arenguklass == 'Keskealine') | (m.Arenguklass=='Valmiv mets')|(m.Arenguklass=='Küpsmets'))
     def harvendusraie(c):
         # consequent
         print ('Raiumisotsus:Jah. Raietüüp: Harvendusraie.')
-    @when_all ((m.Peapuuliik == 'Mänd' or'Lehis' or'Seedermänd')&(m.Vanus >= 90)&(m.Arenguklass == 'Küpsmets' or'Valmiv mets'))
+    @when_all ((m.Peapuuliik == 'Mänd')| (m.Peapuuliik == 'Lehis')| (m.Peapuuliik == 'Seedermänd')&(m.Vanus >= 90)&(m.Boniteediklass =='1')|(m.Boniteediklass =='1A')|(m.Boniteediklass =='2'))
     def lageraie(c):
         # consequent
         print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
-    @when_all ((m.Peapuuliik == 'Kuusk' or'Nulg' or'Ebatsuuga')&(m.Vanus >= 80))
+        
+    @when_all ((m.Peapuuliik == 'Mänd')| (m.Peapuuliik == 'Lehis')| (m.Peapuuliik == 'Seedermänd')&(m.Vanus >= 100)&(m.Boniteediklass =='3'))
     def lageraie(c):
         # consequent
         print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
     
-    @when_all ((m.Peapuuliik == 'Kask')&(m.Vanus >= 60))
+    @when_all ((m.Peapuuliik == 'Mänd')| (m.Peapuuliik == 'Lehis')| (m.Peapuuliik == 'Seedermänd')&(m.Vanus >= 110)&(m.Boniteediklass =='4'))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all ((m.Peapuuliik == 'Mänd')| (m.Peapuuliik == 'Lehis')| (m.Peapuuliik == 'Seedermänd')&(m.Vanus >= 120)&(m.Boniteediklass =='5')|(m.Boniteediklass =='5A'))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all (((m.Peapuuliik == 'Kuusk')| (m.Peapuuliik=='Nulg') | (m.Peapuuliik=='Ebatsuuga'))&(m.Vanus >= 80)&(m.Boniteediklass =='1')|(m.Boniteediklass =='1A')|(m.Boniteediklass =='2'))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all (((m.Peapuuliik == 'Kuusk')| (m.Peapuuliik=='Nulg') | (m.Peapuuliik=='Ebatsuuga'))&(m.Vanus >= 90)&(m.Boniteediklass =='3')|(m.Boniteediklass =='4')|(m.Boniteediklass =='5')|(m.Boniteediklass =='5A'))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+    
+    @when_all ((m.Peapuuliik == 'Kask')&(m.Vanus >= 60)&((m.Boniteediklass =='1A')|(m.Boniteediklass =='1')))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all ((m.Peapuuliik == 'Kask')&(m.Vanus >= 70)&((m.Boniteediklass =='2')|(m.Boniteediklass =='3')|(m.Boniteediklass =='5A')|(m.Boniteediklass =='4')|(m.Boniteediklass =='5')))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all (((m.Peapuuliik == 'Haab')| (m.Peapuuliik=='Pappel') | (m.Peapuuliik=='Pihlakas'))&(m.Vanus >= 30)&(m.Boniteediklass =='1A'))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all (((m.Peapuuliik == 'Haab')| (m.Peapuuliik=='Pappel') | (m.Peapuuliik=='Pihlakas'))&(m.Vanus >= 40)&(m.Boniteediklass =='1')|(m.Boniteediklass =='2'))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all (((m.Peapuuliik == 'Haab')| (m.Peapuuliik=='Pappel') | (m.Peapuuliik=='Pihlakas'))&(m.Vanus >= 50)&(m.Boniteediklass =='3')|(m.Boniteediklass =='4')|(m.Boniteediklass =='5')|(m.Boniteediklass =='5A'))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all((m.Kahjustus == 'Keskmine') | (m.Kahjustus == 'Tugev') | (m.Kahjustus == 'Väga tugev'))
+    def ei_raie_kahjustatus(c):
+        print('Ei raiu, sest kahjustatus on {0}'.format(c.m.Kahjustus))
+        
+    @when_all ((m.Peapuuliik == 'Sanglepp')&(m.Vanus >= 60))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+        
+    @when_all ((m.Peapuuliik == 'Hall-lepp')&(m.Vanus >= 30))
     def lageraie(c):
         # consequent
         print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
 
-post('test', {'Arenguklass':'Suva',
+post('test', {'Arenguklass':'suva',
               'Peapuuliik' : 'Kask',
               'Puudearv':31000,
               'Raiekpv':'15-05-2020',
-              'Vanus':91, 
+              'Vanus':71, 
               'Diameeter':8, 
-              'Korgus':100
+              'Boniteediklass':'3'
               }) 
-post('test', {'Peapuuliik':'Mänd', 'Vanus':65, 'Kahjustus':'Väga tugev'})
-
-#infoks: @when_any kasutame siis, kui ükskõik milline neist reeglitest kehtib. @when_all - kõik reeglid peavad kehtima.
-#Sisendid 
-#
-#(start <= json.dumps(m.Raiekpv, default = myconverter) <= end)
-#,(start <= datetime.datetime.strptime(m.Raiekpv,"%d-%m-%Y") <= end)
-#Puuliik 
-#
-#Vanus 
-#
-#Diameeter 
-#
-#Kõrgus  (selle abil saab teada boniteediklassi) 
-#
-#Puudearv hektari kohta ( selle abil saab planeerida valgustusraiet) 
-#
-#Tagavara 
-#
-#Looduskaitsealune (jah /ei) 
-#
-#Raiekuupäev → linnurahu 15. Aprillist  15. juunini 
-#
-#Arenguklass 
-#
-#Kasvukoht 
-#
-#Väljundid 
-#
-#Raiumisotsus (jah, ei) 
-#
-#Raietüüp (lageraie, harvendusraie, valgustusraie, sanitaarraie) 
-#
-#Mis asemele istutada? 
-#
-#Raiemaht 
+post('test', {
+              'Kahjustus':'Väga tugev'})
