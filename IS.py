@@ -1,6 +1,5 @@
 from durable.lang import *
 
-
 import json
 import datetime
 
@@ -19,45 +18,53 @@ print(start,end)
 #m = m.Raiekpv
 #dt = datetime.datetime.strptime(m.Raiekpv,"%d-%m-%Y")
 #print(dt)
-boniteediklass = str(m.Kõrgus + m.Vanus) #proovisin inputist kätte saada väärtusi, annab mingi errori
-print(boniteediklass)
+#boniteediklass = str(m.Kõrgus + m.Vanus) #proovisin inputist kätte saada väärtusi, annab mingi errori
+
+#    @when_any(m.Kahjustus == 'Keskmine' or 'Tugev' or 'Väga tugev')
+#    def ei_raie_kahjustatus(c):
+#        print('Ei raiu, sest kahjustatus on {0}'.format(c.m.Kahjustus)) #Siin peab määrama veel midagi
 with ruleset('test'):
     # antecedent
+    @when_any(m.Arenguklass == 'Noorendik')
+    def ei_raie_noorendik(c):
+        print('Ei raiu, sest arengusklass on {0}'.format(c.m.Arenguklass))
+        
     @when_any ((m.Arenguklass == 'latimets') & (m.Puudearv < 30000), (m.Arenguklass == 'noorendik'), (m.Looduskaitsealune == 'jah'))
-    def say_hello(c):
+    def ei_raie(c):
         # consequent
         print ('Ei raiu, lõpeta kogu töö. Raiumisotsus: ei') 
         
-    @when_all ((m.Arenguklass == 'latimets') & (m.Puudearv > 30000))
-    def say_hello(c):
-        # consequent
-        print ('Raiumisotsus:Jah. Raietüüp: Valgustusraie. Raieplaneeritud kuupäev langeb linnurahuajale, soovitame raiet teostada alates 16.06.2020')
-        
     @when_all ((m.Arenguklass == 'latimets') & (m.Diameeter > 6))
-    def say_hello(c):
+    def harvendusraie(c):
         # consequent
-        print ('Raiumisotsus:Jah. Raietüüp: Harvendusraie.')
+        print ('Raiumisotsus:Jah. Raietüüp: Harvendusraie. Puu diaameeter:{0}'.format(c.m.Diameeter))
     @when_all ((m.Arenguklass == 'Keskealine' or'Valmiv mets' or'Küpsmets'))
-    def say_hello(c):
+    def harvendusraie(c):
         # consequent
         print ('Raiumisotsus:Jah. Raietüüp: Harvendusraie.')
     @when_all ((m.Peapuuliik == 'Mänd' or'Lehis' or'Seedermänd')&(m.Vanus >= 90)&(m.Arenguklass == 'Küpsmets' or'Valmiv mets'))
-    def say_hello(c):
+    def lageraie(c):
         # consequent
-        print ('Raiumisotsus:Jah. Raietüüp: Lageraie.')
- 
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+    @when_all ((m.Peapuuliik == 'Kuusk' or'Nulg' or'Ebatsuuga')&(m.Vanus >= 80))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
+    
+    @when_all ((m.Peapuuliik == 'Kask')&(m.Vanus >= 60))
+    def lageraie(c):
+        # consequent
+        print ('Raiumisotsus:Jah. Raietüüp: Lageraie. Peapuuliik: {0}'.format(c.m.Peapuuliik))
 
-
-
-
- 
-post('test', {'Arenguklass':'Küpsmets',
-              'Peapuuliik' : 'Mänd',
+post('test', {'Arenguklass':'Suva',
+              'Peapuuliik' : 'Kask',
               'Puudearv':31000,
               'Raiekpv':'15-05-2020',
-              'Kõrgus' : 25,
-              'Vanus' : 91
+              'Vanus':91, 
+              'Diameeter':8, 
+              'Korgus':100
               }) 
+post('test', {'Peapuuliik':'Mänd', 'Vanus':65, 'Kahjustus':'Väga tugev'})
 
 #infoks: @when_any kasutame siis, kui ükskõik milline neist reeglitest kehtib. @when_all - kõik reeglid peavad kehtima.
 #Sisendid 
