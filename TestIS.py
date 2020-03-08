@@ -58,8 +58,7 @@ post('test', {'Arenguklass':'latimets',
               'Vanus':80,  
               'Kasvukoht':'Madalsoo' })
 #T13
-post('test', {'Arenguklass':'latimets',
-              'Peapuuliik' : 'Sanglepp', 
+post('test', {'Peapuuliik' : 'Sanglepp', 
               'Vanus':80,   
               'Diameeter':8,   
               'Kasvukoht':'Osja' })
