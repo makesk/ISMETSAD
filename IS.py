@@ -3,27 +3,32 @@ from durable.lang import *
 with ruleset('test'):
     @when_any(m.Arenguklass == 'Noorendik')
     def ei_raie_noorendik(c):
-        print('Ei raiu, sest arengusklass on {0}'.format(c.m.Arenguklass))
+        print('Raiumisotsus: Ei, sest arengusklass on {0}'.format(c.m.Arenguklass))
         
     @when_any ((m.Arenguklass == 'latimets') & (m.Puudearv < 30000), (m.Arenguklass == 'noorendik'), (m.Looduskaitsealune == 'jah'))
     def ei_raie(c):
-        print ('Ei raiu, lõpeta kogu töö. Raiumisotsus: ei')
+        print ('Raiumisotsus:Ei. Lõpeta kogu töö.')
+    
     @when_all ((m.Arenguklass == 'latimets') & (m.Puudearv > 30000))
     def jah_raie(c):
         print ('Raiumisotsus:Jah. Raietüüp: Valgustusraie')
+    
+    @when_any(m.Linnurahu == 'jah')
+    def ei_raie_linnurahu(c):
+        print('Raiumisotsus:Ei. Tegemist on linnurahuga.')
         
     @when_all ((m.Arenguklass == 'latimets') & (m.Diameeter > 6))
     def harvendusraie(c):
         print ('Raiumisotsus:Jah. Raietüüp: Harvendusraie. Puu diameeter:{0}'.format(c.m.Diameeter))
         Vanus = c.m.Vanus;
         peapuuliik = c.m.Peapuuliik;
-        if((30<Vanus<40) and peapuuliik=='Mänd'):
+        if((30<=Vanus<=40) and peapuuliik=='Mänd'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on mänd JA vanus 30- 40 aastat SIIS raiemaht on 1/3 tagavara')
         if((Vanus>40) and peapuuliik=='Mänd'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on mänd JA vanus >40 SIIS raiemaht on 1/4 tagavara')
-        if((Vanus<30) and peapuuliik=='Mänd'):
+        if((Vanus<=30) and peapuuliik=='Mänd'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on mänd JA vanus <30 SIIS raiemaht on 1/2 tagavara')
-        if((Vanus<40) and peapuuliik=='Kuusk'):
+        if((Vanus<=40) and peapuuliik=='Kuusk'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on kuusk JA vanus <40 aastat SIIS raiemaht on 2/3 tagavara')
         if((Vanus>40) and peapuuliik=='Kuusk'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on kuusk JA vanus >40 aastat SIIS raiemaht on 1/3 tagavara')
@@ -31,7 +36,7 @@ with ruleset('test'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on kask JA vanus <30 aastat SIIS raiemaht on 2/3 tagavara')
         if((Vanus>30) and peapuuliik=='Kask'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on kask JA vanus >30 aastat SIIS raiemaht on 1/2 tagavara')
-        if((Vanus<30) and peapuuliik=='Haab'):
+        if((Vanus<=30) and peapuuliik=='Haab'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on haab JA vanus <30 aastat SIIS raiemaht on 1/2 tagavara')
         if((Vanus>30) and peapuuliik=='Haab'):
             print('Kuna raietüüp on harvendusraie JA peapuuliik on haab JA vanus >30 aastat SIIS raiemaht on 1/3 tagavara')
@@ -264,7 +269,7 @@ with ruleset('test'):
         
     @when_all(m.Kahjustus == 'Nõrk')
     def ei_raie_kahjustatus(c):
-        print('Ei raiu, sest kahjustatus on {0}'.format(c.m.Kahjustus))
+        print('Raiumisotsus:Ei. Põhjuseks kahjustus: {0}'.format(c.m.Kahjustus))
         
     @when_any((m.Kahjustus == 'Keskmine') | (m.Kahjustus == 'Tugev') | (m.Kahjustus == 'Väga tugev'))
     def ei_rai_kahjustatus(c):
@@ -303,28 +308,13 @@ with ruleset('test'):
             print('Kuna kasvukoht on {0}, siis istuta asemele Mänd või kask'.format(c.m.Kasvukoht))
         if(Kasvukoht in('Naadi')):
             print('Kuna kasvukoht on {0}, siis istuta asemele kuusk või kask'.format(c.m.Kasvukoht))
-            
-    @when_any(m.Linnurahu == 'jah')
-    def ei_raie_linnurahu(c):
-        print('Raiumisotsus:Ei. Tegemist on linnurahuga.')
-
-#
-#post('test', {'Arenguklass':'suva',
-#              'Peapuuliik' : 'Kask',
-#              'Puudearv':31000,
-#              'Raiekpv':'15-05-2020',
-#              'Vanus':71, 
-#              'Diameeter':8, 
-#              'Boniteediklass':'3'
-#              'Kahjustus':'Nõrk'
-#              }) 
 
 post('test', {'Arenguklass':'latimets',
               'Peapuuliik':'Mänd',
               'Vanus':93,
               'Boniteediklass':'1',
-              'Kasvukoht':'Naadi'
-
-               }) 
-    
-
+              'Kasvukoht':'Naadi' }) 
+            
+post('test', {'Peapuuliik' : 'Haab',
+              'Vanus':30,  
+              'Boniteediklass':'1A' })
