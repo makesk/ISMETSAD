@@ -1,7 +1,7 @@
 #T1
 post('test', {'Arenguklass':'Noorendik', 
               'Peapuuliik' : 'Mänd', 
-              'Vanus':52})  
+              'Vanus':25})  
 
 #T2
 post('test', {'Peapuuliik':'Hall pähklipuu',
@@ -16,14 +16,13 @@ post('test', {'Arenguklass':'latimets',
 post('test', {'Arenguklass':'latimets', 
               'Peapuuliik' : 'Kask', 
               'Puudearv':1500, 
-              'Vanus':71,  
+              'Vanus':25,  
               'Diameeter':8,  
               'Boniteediklass':'3' }) 
-###
 #T5
 post('test', {'Arenguklass':'latimets',  
               'Peapuuliik' : 'Mänd', 
-              'Vanus':90,   
+              'Vanus':30,   
               'Diameeter':11,   
               'Boniteediklass':'2' }) 
 #T6
@@ -32,11 +31,11 @@ post('test', {'Arenguklass':'latimets',
               'Vanus':35,   
               'Diameeter':9})  
 #T7
-post('test', {'Arenguklass':'Küpsmets',  
+post('test', {'Arenguklass':'Valmiv mets',
               'Peapuuliik' : 'Haab', 
-              'Vanus':40,   
+              'Vanus':25,   
               'Diameeter':15,   
-              'Boniteediklass':'2' }) 
+              'Boniteediklass':'2' })
 #T8
 post('test', {'Peapuuliik':'Mänd', 
               'Vanus':90, 
@@ -65,6 +64,6 @@ post('test', {'Arenguklass':'latimets',
               'Diameeter':8,   
               'Kasvukoht':'Osja' })
 #T14
-post('test', {'Peapuuliik' : 'Mänd',
-              'Vanus':40,  
+post('test', {'Peapuuliik':'Mänd',
+              'Vanus':120,  
               'Kasvukoht':'Kõdusoo' })
